@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Settings</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-dark: #1f2937;
+            --text-grey: #6b7280;
+            
+            /* Theme Gradients */
+            --blue-gradient: linear-gradient(135deg, #3b82f6, #2563eb);
+            --green-gradient: linear-gradient(135deg, #22c55e, #16a34a);
+            --purple-gradient: linear-gradient(135deg, #a855f7, #9333ea);
+            --orange-gradient: linear-gradient(135deg, #f97316, #ea580c);
+            
+            /* Component Colors */
+            --teal-icon-box: #00a99d;
+            --teal-text: #0f766e;
+            --toggle-on: #00a99d;
+            --toggle-off: #cbd5e1;
+            
+            --btn-save-bg: #00a99d;
+            --btn-link: #00a99d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            padding: 2rem;
+            min-height: 100vh;
+            padding-bottom: 5rem; /* Space for fixed save button */
+        }
+
+        /* --- Header --- */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .page-subtitle {
+            font-size: 1rem;
+            color: var(--text-grey);
+            font-weight: 400;
+        }
+
+        /* --- Quick Access Cards --- */
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .quick-card {
+            border-radius: 16px;
+            padding: 1.5rem;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .quick-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .quick-card.blue { background: var(--blue-gradient); }
+        .quick-card.green { background: var(--green-gradient); }
+        .quick-card.purple { background: var(--purple-gradient); }
+        .quick-card.orange { background: var(--orange-gradient); }
+
+        .quick-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .quick-label {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* --- Settings Grid --- */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .settings-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .icon-general { background-color: #0ea5e9; }
+        .icon-notif { background-color: #00a99d; }
+        .icon-security { background-color: #0284c7; }
+        .icon-academic { background-color: #0284c7; }
+        .icon-roles { background-color: #a855f7; }
+        .icon-data { background-color: #f97316; }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        /* Form Elements */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+        }
+
+        .label-text {
+            color: var(--text-grey);
+            font-size: 0.95rem;
+        }
+
+        .form-input, .form-select {
+            padding: 0.6rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            outline: none;
+            width: 200px;
+            text-align: right;
+            background-color: #f9fafb;
+        }
+
+        .form-select {
+            cursor: pointer;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--toggle-off);
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--toggle-on);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Lists (Roles/Data) */
+        .list-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .link-action {
+            color: var(--btn-link);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .data-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+            padding: 0.8rem 1rem;
+            background-color: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .data-title {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .data-desc {
+            font-size: 0.8rem;
+            color: var(--text-grey);
+        }
+
+        /* --- Floating Save Button --- */
+        .save-container {
+            position: fixed;
+            bottom: 30px;
+            right: 100px; /* Offset from chat button */
+            z-index: 100;
+        }
+
+        .btn-save {
+            background-color: var(--btn-save-bg);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 169, 157, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+        }
+
+        /* --- Floating Chat --- */
+        .chat-btn-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .chat-btn {
+            width: 60px;
+            height: 60px;
+            background-color: #0ea5e9;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 10px;
+            height: 10px;
+            background-color: #ff6b6b;
+            border: 2px solid #0ea5e9;
+            border-radius: 50%;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 1024px) {
+            .settings-grid { grid-template-columns: 1fr; }
+            .quick-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 600px) {
+            .quick-grid { grid-template-columns: 1fr; }
+            .save-container { right: 30px; bottom: 100px; width: calc(100% - 60px); }
+            .btn-save { width: 100%; justify-content: center; }
+            .form-input, .form-select { width: 150px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-header">
+        <h1 class="page-title">System Settings</h1>
+        <div class="page-subtitle">Configure system preferences and policies</div>
+    </div>
+
+    <!-- Quick Access -->
+    <div class="quick-grid">
+        <div class="quick-card blue">
+            <i class="fa-solid fa-database quick-icon"></i>
+            <div class="quick-label">Backup Data</div>
+        </div>
+        <div class="quick-card green">
+            <i class="fa-solid fa-lock quick-icon"></i>
+            <div class="quick-label">Security Audit</div>
+        </div>
+        <div class="quick-card purple">
+            <i class="fa-regular fa-envelope quick-icon"></i>
+            <div class="quick-label">Email Config</div>
+        </div>
+        <div class="quick-card orange">
+            <i class="fa-regular fa-credit-card quick-icon"></i>
+            <div class="quick-label">Payment Setup</div>
+        </div>
+    </div>
+
+    <div class="settings-grid">
+        
+        <!-- General Settings -->
+        <div class="settings-card">
+            <div class="card-header">
+                <div class="header-icon icon-general"><i class="fa-solid fa-globe"></i></div>
+                <div class="card-title">General Settings</div>
+            </div>
+            
+            <div class="form-row">
+                <span class="label-text">Institution Name</span>
+                <input type="text" class="form-input" value="Engineering College Bikaner">
+            </div>
+            <div class="form-row">
+                <span class="label-text">Academic Year</span>
+                <select class="form-select">
+                    <option>2024-2025</option>
+                    <option>2023-2024</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <span class="label-text">Time Zone</span>
+                <select class="form-select">
+                    <option>IST (UTC+5:30)</option>
+                    <option>UTC</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <span class="label-text">Default Language</span>
+                <select class="form-select">
+                    <option>English</option>
+                    <option>Hindi</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Notification Settings -->
+        <div class="settings-card">
+            <div class="card-header">
+                <div class="header-icon icon-notif"><i class="fa-regular fa-bell"></i></div>
+                <div class="card-title">Notification Settings</div>
+            </div>
+            
+            <div class="form-row">
+                <span class="label-text">Email Notifications</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="form-row">
+                <span class="label-text">SMS Notifications</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="form-row">
+                <span class="label-text">Push Notifications</span>
+                <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="form-row">
+                <span class="label-text">Weekly Reports</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Security Settings -->
+        <div class="settings-card">
+            <div class="card-header">
+                <div class="header-icon icon-security"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="card-title">Security Settings</div>
+            </div>
+            
+            <div class="form-row">
+                <span class="label-text">Two-Factor Authentication</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="form-row">
+                <span class="label-text">Auto Logout</span>
+                <select class="form-select">
+                    <option>30 minutes</option>
+                    <option>1 hour</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <span class="label-text">Password Expiry</span>
+                <select class="form-select">
+                    <option>90 days</option>
+                    <option>60 days</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <span class="label-text">IP Whitelist</span>
+                <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Academic Settings -->
+        <div class="settings-card">
+            <div class="card-header">
+                <div class="header-icon icon-academic"><i class="fa-regular fa-calendar"></i></div>
+                <div class="card-title">Academic Settings</div>
+            </div>
+            
+            <div class="form-row">
+                <span class="label-text">Minimum Attendance</span>
+                <input type="text" class="form-input" value="75%">
+            </div>
+            <div class="form-row">
+                <span class="label-text">Grading System</span>
+                <select class="form-select">
+                    <option>10-Point Scale</option>
+                    <option>Percentage</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <span class="label-text">Exam Duration</span>
+                <select class="form-select">
+                    <option>3 hours</option>
+                    <option>2 hours</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <span class="label-text">Late Submission</span>
+                <select class="form-select">
+                    <option>Allowed</option>
+                    <option>Not Allowed</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- User Roles & Permissions -->
+        <div class="settings-card">
+            <div class="card-header">
+                <div class="header-icon icon-roles"><i class="fa-solid fa-users-gear"></i></div>
+                <div class="card-title">User Roles & Permissions</div>
+            </div>
+            
+            <div class="list-row">
+                <span>Super Admin</span>
+                <span class="link-action">Configure →</span>
+            </div>
+            <div class="list-row">
+                <span>Admin</span>
+                <span class="link-action">Configure →</span>
+            </div>
+            <div class="list-row">
+                <span>Faculty</span>
+                <span class="link-action">Configure →</span>
+            </div>
+            <div class="list-row">
+                <span>Student</span>
+                <span class="link-action">Configure →</span>
+            </div>
+        </div>
+
+        <!-- Data Management -->
+        <div class="settings-card">
+            <div class="card-header">
+                <div class="header-icon icon-data"><i class="fa-solid fa-database"></i></div>
+                <div class="card-title">Data Management</div>
+            </div>
+            
+            <div class="data-item">
+                <div class="data-title">Export All Data</div>
+                <div class="data-desc">Download complete database</div>
+            </div>
+            <div class="data-item">
+                <div class="data-title">Import Data</div>
+                <div class="data-desc">Upload CSV or Excel files</div>
+            </div>
+            <div class="data-item">
+                <div class="data-title">Data Cleanup</div>
+                <div class="data-desc">Remove old records</div>
+            </div>
+            <div class="data-item">
+                <div class="data-title">Archive</div>
+                <div class="data-desc">Move to archive storage</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Floating Save Button -->
+    <div class="save-container">
+        <button class="btn-save" onclick="alert('Settings Saved Successfully!')">
+            <i class="fa-regular fa-floppy-disk"></i> Save All Settings
+        </button>
+    </div>
+
+    <!-- Floating Chat -->
+    <div class="chat-btn-container">
+        <div class="chat-btn">
+            <i class="fa-regular fa-comment-dots"></i>
+            <span class="notification-dot"></span>
+        </div>
+        <div style="width: 35px; height: 35px; background: #1f2937; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+            <i class="fa-solid fa-question" style="font-size: 0.8rem;"></i>
+        </div>
+    </div>
+
+</body>
+</html>

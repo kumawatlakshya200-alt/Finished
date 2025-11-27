@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Information</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-dark: #1f2937;
+            --text-grey: #6b7280;
+            --border-light: #e5e7eb;
+
+            /* Sports Theme Colors */
+            --gold-primary: #eab308; /* Darker yellow/gold */
+            --gold-light: #fef9c3;
+            --teal-light-bg: #ccfbf1;
+            --teal-icon: #00a99d;
+            --purple-light-bg: #f3e8ff;
+            --purple-icon: #a855f7;
+            --blue-light-bg: #dbeafe;
+            --blue-icon: #3b82f6;
+
+            /* Event Colors */
+            --event-border: #e9d5ff; /* Light purple border */
+            --event-btn-bg: #f3e8ff;
+            --event-btn-text: #9333ea;
+
+            /* Achievement Colors */
+            --medal-card-bg: #fefce8; /* Very light yellow */
+            --badge-gold: #facc15;
+            --badge-silver: #cbd5e1;
+            --badge-bronze: #fdba74;
+
+            /* Training Colors */
+            --training-card-bg: #f0fdfa; /* Minty green/cyan */
+            --training-text: #0f766e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        /* --- Header --- */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        /* --- Stats Grid --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 160px;
+        }
+
+        /* Special Solid Gold Card */
+        .stat-card.solid-gold {
+            background-color: var(--gold-primary);
+            color: white;
+            position: relative;
+        }
+        
+        .solid-gold .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .solid-gold .stat-number {
+            font-size: 2.5rem;
+            font-weight: 500;
+            line-height: 1;
+            color: white;
+        }
+
+        .solid-gold .stat-label {
+            font-size: 1rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 5px;
+        }
+
+        /* Regular White Stats Cards */
+        .stat-card.white-card {
+            padding-left: 2rem;
+        }
+
+        .stat-header-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .icon-box {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+        }
+
+        .bg-teal { background-color: var(--teal-light-bg); color: var(--teal-icon); }
+        .bg-purple { background-color: var(--purple-light-bg); color: var(--purple-icon); }
+        .bg-blue { background-color: var(--blue-light-bg); color: var(--blue-icon); }
+
+        .white-stat-number {
+            font-size: 2rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .white-stat-label {
+            color: var(--text-grey);
+            font-size: 0.95rem;
+        }
+
+        /* --- Section Titles --- */
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+        }
+
+        /* --- Upcoming Events List --- */
+        .events-container {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            margin-bottom: 2rem;
+        }
+
+        .events-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .event-item {
+            border: 1px solid var(--event-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .event-info h4 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .event-meta {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--text-grey);
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .event-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .event-meta i {
+            color: var(--purple-icon);
+        }
+
+        .btn-register {
+            background-color: var(--event-btn-bg);
+            color: var(--event-btn-text);
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-register:hover {
+            background-color: #e9d5ff;
+        }
+
+        /* --- Achievements Section --- */
+        .achievements-container {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            margin-bottom: 2rem;
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .achievement-card {
+            background-color: var(--medal-card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .medal-icon {
+            font-size: 1.8rem;
+            color: #b45309; /* Generic bronze/brown for icon base, overridden below if needed */
+            margin-bottom: 0.8rem;
+        }
+
+        .medal-badge {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Specific Medal Styles */
+        .medal-gold .medal-icon { color: #ca8a04; }
+        .medal-gold .medal-badge { background-color: #fce7f3; color: #854d0e; background: #fde047; } /* Screenshot uses a specific yellow pill */
+        
+        .medal-silver .medal-icon { color: #475569; }
+        .medal-silver .medal-badge { background-color: #e2e8f0; color: #475569; }
+
+        .medal-bronze .medal-icon { color: #b45309; }
+        .medal-bronze .medal-badge { background-color: #ffedd5; color: #9a3412; }
+
+        .ach-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            color: var(--text-dark);
+        }
+
+        .ach-desc {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .ach-year {
+            font-size: 0.85rem;
+            color: var(--text-grey);
+        }
+
+        /* --- Training Schedule --- */
+        .schedule-container {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .schedule-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .schedule-item {
+            background-color: var(--training-card-bg);
+            border-radius: 12px;
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .schedule-left h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .schedule-left span {
+            font-size: 0.95rem;
+            color: var(--text-grey);
+        }
+
+        .schedule-right {
+            text-align: right;
+        }
+
+        .schedule-time {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .schedule-coach {
+            font-size: 0.85rem;
+            color: var(--text-grey);
+        }
+
+        /* --- Floating Chat --- */
+        .chat-btn-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-btn {
+            width: 60px;
+            height: 60px;
+            background-color: #0ea5e9;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 10px;
+            height: 10px;
+            background-color: #ff6b6b;
+            border: 2px solid #0ea5e9;
+            border-radius: 50%;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 1024px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .achievements-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .event-item { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .btn-register { width: 100%; }
+            .schedule-item { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+            .schedule-right { text-align: left; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-header">
+        <h1 class="page-title">Sports Information</h1>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+        <!-- Total Medals (Solid Gold) -->
+        <div class="stat-card solid-gold">
+            <i class="fa-solid fa-trophy stat-icon"></i>
+            <div class="stat-number">4</div>
+            <div class="stat-label">Total Medals</div>
+        </div>
+
+        <!-- Active Sports -->
+        <div class="stat-card white-card">
+            <div class="stat-header-row">
+                <div class="icon-box bg-teal"><i class="fa-solid fa-medal"></i></div>
+                <div class="white-stat-number">3</div>
+            </div>
+            <div class="white-stat-label">Active Sports</div>
+        </div>
+
+        <!-- Upcoming Events -->
+        <div class="stat-card white-card">
+            <div class="stat-header-row">
+                <div class="icon-box bg-purple"><i class="fa-regular fa-calendar"></i></div>
+                <div class="white-stat-number">4</div>
+            </div>
+            <div class="white-stat-label">Upcoming Events</div>
+        </div>
+
+        <!-- Competitions -->
+        <div class="stat-card white-card">
+            <div class="stat-header-row">
+                <div class="icon-box bg-blue"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="white-stat-number">12</div>
+            </div>
+            <div class="white-stat-label">Competitions</div>
+        </div>
+    </div>
+
+    <!-- Upcoming Events Section -->
+    <div class="events-container">
+        <div class="section-title">Upcoming Sports Events</div>
+        <div class="events-list">
+            
+            <!-- Event 1 -->
+            <div class="event-item">
+                <div class="event-info">
+                    <h4>Inter-College Cricket Tournament</h4>
+                    <div class="event-meta">
+                        <span><i class="fa-regular fa-calendar"></i> 2024-12-10</span>
+                        <span><i class="fa-regular fa-clock"></i> 09:00 AM</span>
+                        <span>Venue: College Ground</span>
+                    </div>
+                </div>
+                <button class="btn-register" onclick="registerEvent('Cricket Tournament')">Register</button>
+            </div>
+
+            <!-- Event 2 -->
+            <div class="event-item">
+                <div class="event-info">
+                    <h4>Annual Sports Day</h4>
+                    <div class="event-meta">
+                        <span><i class="fa-regular fa-calendar"></i> 2024-12-15</span>
+                        <span><i class="fa-regular fa-clock"></i> 08:00 AM</span>
+                        <span>Venue: Main Stadium</span>
+                    </div>
+                </div>
+                <button class="btn-register" onclick="registerEvent('Sports Day')">Register</button>
+            </div>
+
+            <!-- Event 3 -->
+            <div class="event-item">
+                <div class="event-info">
+                    <h4>Basketball Championship</h4>
+                    <div class="event-meta">
+                        <span><i class="fa-regular fa-calendar"></i> 2024-12-20</span>
+                        <span><i class="fa-regular fa-clock"></i> 10:00 AM</span>
+                        <span>Venue: Indoor Stadium</span>
+                    </div>
+                </div>
+                <button class="btn-register" onclick="registerEvent('Basketball Championship')">Register</button>
+            </div>
+
+            <!-- Event 4 -->
+            <div class="event-item">
+                <div class="event-info">
+                    <h4>Table Tennis Competition</h4>
+                    <div class="event-meta">
+                        <span><i class="fa-regular fa-calendar"></i> 2024-12-25</span>
+                        <span><i class="fa-regular fa-clock"></i> 02:00 PM</span>
+                        <span>Venue: Sports Complex</span>
+                    </div>
+                </div>
+                <button class="btn-register" onclick="registerEvent('TT Competition')">Register</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Achievements Section -->
+    <div class="achievements-container">
+        <div class="section-title">My Sports Achievements</div>
+        <div class="achievements-grid">
+            
+            <!-- Achievement 1 -->
+            <div class="achievement-card medal-gold">
+                <i class="fa-solid fa-trophy medal-icon"></i>
+                <span class="medal-badge" style="background-color: #fde047; color: #854d0e;">Gold Medal</span>
+                <div class="ach-title">Cricket</div>
+                <div class="ach-desc">Captain - College Team</div>
+                <div class="ach-year">Year: 2024</div>
+            </div>
+
+            <!-- Achievement 2 -->
+            <div class="achievement-card medal-silver">
+                <i class="fa-solid fa-trophy medal-icon"></i>
+                <span class="medal-badge">Silver Medal</span>
+                <div class="ach-title">Football</div>
+                <div class="ach-desc">Inter-College Tournament Runner-up</div>
+                <div class="ach-year">Year: 2023</div>
+            </div>
+
+            <!-- Achievement 3 -->
+            <div class="achievement-card medal-gold">
+                <i class="fa-solid fa-trophy medal-icon"></i>
+                <span class="medal-badge" style="background-color: #fde047; color: #854d0e;">Gold Medal</span>
+                <div class="ach-title">Athletics</div>
+                <div class="ach-desc">100m Sprint - 1st Position</div>
+                <div class="ach-year">Year: 2024</div>
+            </div>
+
+            <!-- Achievement 4 -->
+            <div class="achievement-card medal-bronze">
+                <i class="fa-solid fa-trophy medal-icon"></i>
+                <span class="medal-badge">Bronze Medal</span>
+                <div class="ach-title">Chess</div>
+                <div class="ach-desc">State Level Competition - 3rd Position</div>
+                <div class="ach-year">Year: 2023</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Training Schedule -->
+    <div class="schedule-container">
+        <div class="section-title">My Training Schedule</div>
+        <div class="schedule-list">
+            
+            <div class="schedule-item">
+                <div class="schedule-left">
+                    <h4>Monday</h4>
+                    <span>Cricket Practice</span>
+                </div>
+                <div class="schedule-right">
+                    <div class="schedule-time">05:00 PM - 07:00 PM</div>
+                    <div class="schedule-coach">Coach: Coach Rajesh</div>
+                </div>
+            </div>
+
+            <div class="schedule-item">
+                <div class="schedule-left">
+                    <h4>Wednesday</h4>
+                    <span>Gym Session</span>
+                </div>
+                <div class="schedule-right">
+                    <div class="schedule-time">06:00 AM - 07:00 AM</div>
+                    <div class="schedule-coach">Coach: Trainer Amit</div>
+                </div>
+            </div>
+
+            <div class="schedule-item">
+                <div class="schedule-left">
+                    <h4>Friday</h4>
+                    <span>Cricket Practice</span>
+                </div>
+                <div class="schedule-right">
+                    <div class="schedule-time">05:00 PM - 07:00 PM</div>
+                    <div class="schedule-coach">Coach: Coach Rajesh</div>
+                </div>
+            </div>
+
+            <div class="schedule-item">
+                <div class="schedule-left">
+                    <h4>Saturday</h4>
+                    <span>Athletics Training</span>
+                </div>
+                <div class="schedule-right">
+                    <div class="schedule-time">06:00 AM - 08:00 AM</div>
+                    <div class="schedule-coach">Coach: Coach Priya</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Floating Chat -->
+    <div class="chat-btn-container">
+        <div class="chat-btn">
+            <i class="fa-regular fa-comment-dots"></i>
+            <span class="notification-dot"></span>
+        </div>
+        <div style="width: 35px; height: 35px; background: #1f2937; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+            <i class="fa-solid fa-question" style="font-size: 0.8rem;"></i>
+        </div>
+    </div>
+
+    <script>
+        function registerEvent(eventName) {
+            alert('Registered for ' + eventName + ' successfully!');
+        }
+    </script>
+</body>
+</html>

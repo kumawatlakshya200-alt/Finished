@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills & Lab</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-dark: #1f2937;
+            --text-grey: #6b7280;
+            --border-light: #e5e7eb;
+
+            /* Skill Colors */
+            --blue-primary: #3b82f6;
+            --blue-light: #dbeafe;
+            --green-primary: #22c55e;
+            --green-light: #dcfce7;
+            --purple-primary: #a855f7;
+            --purple-light: #f3e8ff;
+            --orange-primary: #f97316;
+            --orange-light: #ffedd5;
+            --red-primary: #ef4444;
+            --red-light: #fee2e2;
+            --teal-primary: #00a99d;
+            --teal-light: #ccfbf1;
+
+            /* Status Colors */
+            --status-completed-bg: #dcfce7;
+            --status-completed-text: #16a34a;
+            --status-progress-bg: #dbeafe;
+            --status-progress-text: #2563eb;
+            
+            /* Certification Color */
+            --cert-green: #10b981;
+            --cert-bg: #ecfdf5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        /* --- Header --- */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        /* --- Skills Section --- */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .skill-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .skill-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .skill-info {
+            flex-grow: 1;
+        }
+
+        .skill-name {
+            font-weight: 500;
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .skill-percentage {
+            font-size: 0.85rem;
+            color: var(--text-grey);
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 8px;
+            background-color: #f3f4f6;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        /* Skill Specific Colors */
+        .skill-blue .icon-box { background-color: var(--blue-primary); }
+        .skill-blue .progress-fill { background-color: var(--blue-primary); }
+
+        .skill-green .icon-box { background-color: var(--green-primary); }
+        .skill-green .progress-fill { background-color: var(--green-primary); }
+
+        .skill-purple .icon-box { background-color: var(--purple-primary); }
+        .skill-purple .progress-fill { background-color: var(--purple-primary); }
+
+        .skill-orange .icon-box { background-color: var(--orange-primary); }
+        .skill-orange .progress-fill { background-color: var(--orange-primary); }
+
+        .skill-red .icon-box { background-color: var(--red-primary); }
+        .skill-red .progress-fill { background-color: var(--red-primary); }
+
+        .skill-teal .icon-box { background-color: var(--teal-primary); }
+        .skill-teal .progress-fill { background-color: var(--teal-primary); }
+
+        /* --- Lab Projects Section --- */
+        .section-container {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .btn-add {
+            background-color: var(--teal-primary);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+        
+        .btn-add:hover { opacity: 0.9; }
+
+        .project-list {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .project-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .project-item:last-child {
+            border-bottom: none;
+        }
+
+        .project-info h4 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+            color: var(--text-dark);
+        }
+
+        .project-info span {
+            font-size: 0.9rem;
+            color: var(--text-grey);
+        }
+
+        .project-meta {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .meta-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 60px;
+        }
+
+        .meta-label {
+            font-size: 0.8rem;
+            color: var(--text-grey);
+            margin-bottom: 0.3rem;
+        }
+
+        .status-pill {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-completed { background-color: var(--status-completed-bg); color: var(--status-completed-text); }
+        .status-progress { background-color: var(--status-progress-bg); color: var(--status-progress-text); }
+
+        .grade-pill {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #f3e8ff;
+            color: #9333ea;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .date-text {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        /* --- Certifications Section --- */
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .cert-card {
+            background-color: var(--cert-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid #d1fae5;
+        }
+
+        .cert-icon {
+            font-size: 1.5rem;
+            color: var(--cert-green);
+            margin-bottom: 1rem;
+        }
+
+        .cert-title {
+            font-weight: 500;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            color: var(--text-dark);
+        }
+
+        .cert-provider {
+            font-size: 0.85rem;
+            color: var(--text-grey);
+            margin-bottom: 0.2rem;
+        }
+
+        .cert-date {
+            font-size: 0.85rem;
+            color: var(--text-grey);
+            margin-bottom: 1rem;
+        }
+
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--cert-green);
+            font-size: 0.85rem;
+            font-weight: 500;
+            background-color: white;
+            padding: 4px 10px;
+            border-radius: 8px;
+        }
+
+        /* --- Floating Chat --- */
+        .chat-btn-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-btn {
+            width: 60px;
+            height: 60px;
+            background-color: #0ea5e9;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 10px;
+            height: 10px;
+            background-color: #ff6b6b;
+            border: 2px solid #0ea5e9;
+            border-radius: 50%;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 1024px) {
+            .skills-grid { grid-template-columns: repeat(2, 1fr); }
+            .cert-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .skills-grid { grid-template-columns: 1fr; }
+            .cert-grid { grid-template-columns: 1fr; }
+            .project-item { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .project-meta { width: 100%; justify-content: space-between; gap: 0.5rem; }
+            .meta-group { align-items: flex-start; }
+            .btn-add { font-size: 0.85rem; padding: 0.6rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-header">
+        <h1 class="page-title">Skills & Lab</h1>
+    </div>
+
+    <!-- Skills Section -->
+    <div class="skills-grid">
+        <!-- C/C++ -->
+        <div class="skill-card skill-blue">
+            <div class="skill-header">
+                <div class="icon-box"><i class="fa-solid fa-code"></i></div>
+                <div class="skill-info">
+                    <div class="skill-name">C/C++ Programming</div>
+                    <div class="skill-percentage">90% Proficiency</div>
+                </div>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" style="width: 90%;"></div>
+            </div>
+        </div>
+
+        <!-- Data Structures -->
+        <div class="skill-card skill-green">
+            <div class="skill-header">
+                <div class="icon-box"><i class="fa-solid fa-database"></i></div>
+                <div class="skill-info">
+                    <div class="skill-name">Data Structures</div>
+                    <div class="skill-percentage">85% Proficiency</div>
+                </div>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" style="width: 85%;"></div>
+            </div>
+        </div>
+
+        <!-- Web Dev -->
+        <div class="skill-card skill-purple">
+            <div class="skill-header">
+                <div class="icon-box"><i class="fa-solid fa-globe"></i></div>
+                <div class="skill-info">
+                    <div class="skill-name">Web Development</div>
+                    <div class="skill-percentage">80% Proficiency</div>
+                </div>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" style="width: 80%;"></div>
+            </div>
+        </div>
+
+        <!-- DBMS -->
+        <div class="skill-card skill-orange">
+            <div class="skill-header">
+                <div class="icon-box"><i class="fa-solid fa-server"></i></div>
+                <div class="skill-info">
+                    <div class="skill-name">Database Management</div>
+                    <div class="skill-percentage">75% Proficiency</div>
+                </div>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" style="width: 75%;"></div>
+            </div>
+        </div>
+
+        <!-- OS -->
+        <div class="skill-card skill-red">
+            <div class="skill-header">
+                <div class="icon-box"><i class="fa-solid fa-microchip"></i></div>
+                <div class="skill-info">
+                    <div class="skill-name">Operating Systems</div>
+                    <div class="skill-percentage">82% Proficiency</div>
+                </div>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" style="width: 82%;"></div>
+            </div>
+        </div>
+
+        <!-- Networks -->
+        <div class="skill-card skill-teal">
+            <div class="skill-header">
+                <div class="icon-box"><i class="fa-solid fa-network-wired"></i></div>
+                <div class="skill-info">
+                    <div class="skill-name">Computer Networks</div>
+                    <div class="skill-percentage">78% Proficiency</div>
+                </div>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" style="width: 78%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lab Projects Section -->
+    <div class="section-container">
+        <div class="section-header">
+            <div class="section-title">Lab Projects</div>
+        </div>
+        
+        <div class="project-list">
+            <!-- Project 1 -->
+            <div class="project-item">
+                <div class="project-info">
+                    <h4>E-commerce Website</h4>
+                    <span>Web Development</span>
+                </div>
+                <div class="project-meta">
+                    <div class="meta-group">
+                        <span class="meta-label">Status</span>
+                        <span class="status-pill status-completed">Completed</span>
+                    </div>
+                    <div class="meta-group">
+                        <span class="meta-label">Grade</span>
+                        <span class="grade-pill">A+</span>
+                    </div>
+                    <div class="meta-group">
+                        <span class="meta-label">Date</span>
+                        <span class="date-text">Oct 2024</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="project-item">
+                <div class="project-info">
+                    <h4>Student Management System</h4>
+                    <span>Database Management</span>
+                </div>
+                <div class="project-meta">
+                    <div class="meta-group">
+                        <span class="meta-label">Status</span>
+                        <span class="status-pill status-completed">Completed</span>
+                    </div>
+                    <div class="meta-group">
+                        <span class="meta-label">Grade</span>
+                        <span class="grade-pill">A</span>
+                    </div>
+                    <div class="meta-group">
+                        <span class="meta-label">Date</span>
+                        <span class="date-text">Sep 2024</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="project-item">
+                <div class="project-info">
+                    <h4>Network Simulator</h4>
+                    <span>Computer Networks</span>
+                </div>
+                <div class="project-meta">
+                    <div class="meta-group">
+                        <span class="meta-label">Status</span>
+                        <span class="status-pill status-progress">In Progress</span>
+                    </div>
+                    <div class="meta-group">
+                        <span class="meta-label">Grade</span>
+                        <span class="grade-pill" style="background: #f3f4f6; color: #6b7280;">-</span>
+                    </div>
+                    <div class="meta-group">
+                        <span class="meta-label">Date</span>
+                        <span class="date-text">Ongoing</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 4 -->
+            <div class="project-item">
+                <div class="project-info">
+                    <h4>OS Scheduler Implementation</h4>
+                    <span>Operating Systems</span>
+                </div>
+                <div class="project-meta">
+                    <div class="meta-group">
+                        <span class="meta-label">Status</span>
+                        <span class="status-pill status-completed">Completed</span>
+                    </div>
+                    <div class="meta-group">
+                        <span class="meta-label">Grade</span>
+                        <span class="grade-pill">A+</span>
+                    </div>
+                    <div class="meta-group">
+                        <span class="meta-label">Date</span>
+                        <span class="date-text">Nov 2024</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Certifications Section -->
+    <div class="section-container">
+        <div class="section-header">
+            <div class="section-title">Certifications</div>
+            <button class="btn-add" onclick="addCertificate()">
+                <i class="fa-solid fa-plus"></i> Add Certificate
+            </button>
+        </div>
+
+        <div class="cert-grid">
+            <!-- Cert 1 -->
+            <div class="cert-card">
+                <div class="cert-icon"><i class="fa-solid fa-certificate"></i></div>
+                <div class="cert-title">Python for Data Science</div>
+                <div class="cert-provider">Coursera</div>
+                <div class="cert-date">Aug 2024</div>
+                <div class="verified-badge"><i class="fa-solid fa-check"></i> Verified</div>
+            </div>
+
+            <!-- Cert 2 -->
+            <div class="cert-card">
+                <div class="cert-icon"><i class="fa-solid fa-certificate"></i></div>
+                <div class="cert-title">Web Development Bootcamp</div>
+                <div class="cert-provider">Udemy</div>
+                <div class="cert-date">Jul 2024</div>
+                <div class="verified-badge"><i class="fa-solid fa-check"></i> Verified</div>
+            </div>
+
+            <!-- Cert 3 -->
+            <div class="cert-card">
+                <div class="cert-icon"><i class="fa-solid fa-certificate"></i></div>
+                <div class="cert-title">AWS Cloud Practitioner</div>
+                <div class="cert-provider">Amazon</div>
+                <div class="cert-date">Sep 2024</div>
+                <div class="verified-badge"><i class="fa-solid fa-check"></i> Verified</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Chat -->
+    <div class="chat-btn-container">
+        <div class="chat-btn">
+            <i class="fa-regular fa-comment-dots"></i>
+            <span class="notification-dot"></span>
+        </div>
+        <div style="width: 35px; height: 35px; background: #1f2937; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+            <i class="fa-solid fa-question" style="font-size: 0.8rem;"></i>
+        </div>
+    </div>
+
+    <script>
+        function addCertificate() {
+            alert('Open "Add Certificate" Modal');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students Management</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-dark: #1f2937;
+            --text-grey: #6b7280;
+            
+            /* Theme Colors */
+            --blue-primary: #3b82f6;
+            --blue-gradient: linear-gradient(135deg, #3b82f6, #60a5fa);
+            --green-primary: #22c55e;
+            --green-gradient: linear-gradient(135deg, #22c55e, #4ade80);
+            --purple-primary: #a855f7;
+            --purple-gradient: linear-gradient(135deg, #a855f7, #c084fc);
+            --orange-primary: #f97316;
+            --orange-gradient: linear-gradient(135deg, #f97316, #fb923c);
+            
+            /* Table Colors */
+            --teal-bg: #ccfbf1; --teal-text: #0f766e;
+            --blue-bg: #dbeafe; --blue-text: #1e40af;
+            --yellow-bg: #fef9c3; --yellow-text: #854d0e;
+            
+            /* Action Button Colors */
+            --btn-import-bg: #dbeafe; --btn-import-text: #1e40af;
+            --btn-export-bg: #dcfce7; --btn-export-text: #16a34a;
+            --btn-add-bg: #00a99d; --btn-add-text: #ffffff;
+            
+            /* Table Action Icons */
+            --icon-view: #3b82f6;
+            --icon-edit: #10b981;
+            --icon-delete: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        /* --- Header --- */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .header-left h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .header-left p {
+            font-size: 1rem;
+            color: var(--text-grey);
+            font-weight: 400;
+        }
+
+        .btn-add-student {
+            background-color: var(--btn-add-bg);
+            color: var(--btn-add-text);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            transition: opacity 0.2s;
+        }
+
+        .btn-add-student:hover {
+            opacity: 0.9;
+        }
+
+        /* --- Stats Grid --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            border-radius: 16px;
+            padding: 1.5rem;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 120px;
+        }
+
+        .stat-card.blue { background: var(--blue-gradient); }
+        .stat-card.green { background: var(--green-gradient); }
+        .stat-card.purple { background: var(--purple-gradient); }
+        .stat-card.orange { background: var(--orange-gradient); }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 600;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        /* --- Filters & Search --- */
+        .filter-section {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .search-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-container {
+            flex-grow: 1;
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 2.8rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--blue-primary);
+        }
+
+        .dropdown-select {
+            padding: 0.8rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            background-color: white;
+            outline: none;
+            cursor: pointer;
+            min-width: 180px;
+        }
+
+        .btn-filter {
+            background-color: #ccfbf1; /* Very light teal */
+            color: #0f766e;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-action {
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+        }
+
+        .btn-import { background-color: var(--btn-import-bg); color: var(--btn-import-text); }
+        .btn-export { background-color: var(--btn-export-bg); color: var(--btn-export-text); }
+
+        /* --- Table Section --- */
+        .table-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            overflow-x: auto;
+        }
+
+        .student-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .student-table th {
+            text-align: left;
+            padding: 1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 0.9rem;
+        }
+
+        .student-table td {
+            padding: 1.2rem 1rem;
+            border-bottom: 1px solid #f3f4f6;
+            vertical-align: middle;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        .student-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Table Content Styling */
+        .student-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .student-name {
+            font-weight: 500;
+            margin-bottom: 0.1rem;
+        }
+
+        .student-email {
+            font-size: 0.8rem;
+            color: var(--text-grey);
+        }
+
+        .dept-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .badge-cse { background-color: var(--teal-bg); color: var(--teal-text); }
+        .badge-ece { background-color: var(--teal-bg); color: var(--teal-text); }
+        .badge-me { background-color: var(--teal-bg); color: var(--teal-text); } /* Using teal for all as per screenshot */
+        .badge-ee { background-color: var(--teal-bg); color: var(--teal-text); }
+
+        /* Progress Bar for Attendance */
+        .progress-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 160px;
+        }
+
+        .progress-bar-bg {
+            flex-grow: 1;
+            height: 6px;
+            background-color: #f3f4f6;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+
+        .fill-green { background-color: #22c55e; }
+        .fill-yellow { background-color: #eab308; }
+
+        .progress-text {
+            font-size: 0.85rem;
+            color: var(--text-grey);
+            width: 35px;
+            text-align: right;
+        }
+
+        /* CGPA Badge */
+        .cgpa-badge {
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-block;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .cgpa-blue { background-color: var(--blue-bg); color: var(--blue-text); }
+        .cgpa-green { background-color: var(--btn-export-bg); color: var(--btn-export-text); }
+        .cgpa-yellow { background-color: var(--yellow-bg); color: var(--yellow-text); }
+
+        /* Action Icons */
+        .action-icons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+
+        .icon-btn:hover { transform: scale(1.1); }
+
+        .btn-view-icon { color: var(--icon-view); }
+        .btn-edit-icon { color: var(--icon-edit); }
+        .btn-delete-icon { color: var(--icon-delete); }
+
+        /* --- Floating Chat --- */
+        .chat-btn-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-btn {
+            width: 60px;
+            height: 60px;
+            background-color: #0ea5e9;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 10px;
+            height: 10px;
+            background-color: #ff6b6b;
+            border: 2px solid #0ea5e9;
+            border-radius: 50%;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 1200px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 900px) {
+            .search-row { flex-direction: column; }
+            .dropdown-select, .btn-filter { width: 100%; }
+            .action-buttons { width: 100%; justify-content: space-between; }
+            .btn-action { flex: 1; justify-content: center; }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .page-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .btn-add-student { width: 100%; justify-content: center; }
+            .student-table { min-width: 800px; } /* Force scroll */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-header">
+        <div class="header-left">
+            <h1>Students Management</h1>
+            <p>Manage all student records and information</p>
+        </div>
+        <button class="btn-add-student" onclick="alert('Add Student Modal')">
+            <i class="fa-solid fa-plus"></i> Add Student
+        </button>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+        <div class="stat-card blue">
+            <div class="stat-value">6</div>
+            <div class="stat-label">Total Students</div>
+        </div>
+        <div class="stat-card green">
+            <div class="stat-value">5</div>
+            <div class="stat-label">Active</div>
+        </div>
+        <div class="stat-card purple">
+            <div class="stat-value">91%</div>
+            <div class="stat-label">Avg Attendance</div>
+        </div>
+        <div class="stat-card orange">
+            <div class="stat-value">8.5</div>
+            <div class="stat-label">Avg CGPA</div>
+        </div>
+    </div>
+
+    <!-- Filter & Search Section -->
+    <div class="filter-section">
+        <div class="search-row">
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" class="search-input" placeholder="Search by name or ID...">
+            </div>
+            <select class="dropdown-select">
+                <option>All Departments</option>
+                <option>CSE</option>
+                <option>ECE</option>
+                <option>ME</option>
+                <option>Civil</option>
+            </select>
+            <button class="btn-filter">
+                <i class="fa-solid fa-filter"></i> More Filters
+            </button>
+        </div>
+        <div class="action-buttons">
+            <button class="btn-action btn-import">
+                <i class="fa-solid fa-file-import"></i> Import CSV
+            </button>
+            <button class="btn-action btn-export">
+                <i class="fa-solid fa-file-export"></i> Export
+            </button>
+        </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="table-container">
+        <table class="student-table">
+            <thead>
+                <tr>
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Year</th>
+                    <th>Attendance</th>
+                    <th>CGPA</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <!-- Row 1 -->
+                <tr>
+                    <td>2021CSE001</td>
+                    <td>
+                        <div class="student-info">
+                            <span class="student-name">Himanshu Saini</span>
+                            <span class="student-email">himanshu@ecb.ac.in</span>
+                        </div>
+                    </td>
+                    <td><span class="dept-badge badge-cse">CSE</span></td>
+                    <td>3rd Year</td>
+                    <td>
+                        <div class="progress-wrapper">
+                            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green" style="width: 92%;"></div></div>
+                            <span class="progress-text">92%</span>
+                        </div>
+                    </td>
+                    <td><span class="cgpa-badge cgpa-blue">8.5</span></td>
+                    <td>
+                        <div class="action-icons">
+                            <button class="icon-btn btn-view-icon"><i class="fa-regular fa-eye"></i></button>
+                            <button class="icon-btn btn-edit-icon"><i class="fa-regular fa-pen-to-square"></i></button>
+                            <button class="icon-btn btn-delete-icon"><i class="fa-regular fa-trash-can"></i></button>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Row 2 -->
+                <tr>
+                    <td>2021CSE002</td>
+                    <td>
+                        <div class="student-info">
+                            <span class="student-name">Priya Sharma</span>
+                            <span class="student-email">priya@ecb.ac.in</span>
+                        </div>
+                    </td>
+                    <td><span class="dept-badge badge-cse">CSE</span></td>
+                    <td>3rd Year</td>
+                    <td>
+                        <div class="progress-wrapper">
+                            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green" style="width: 95%;"></div></div>
+                            <span class="progress-text">95%</span>
+                        </div>
+                    </td>
+                    <td><span class="cgpa-badge cgpa-green">9.2</span></td>
+                    <td>
+                        <div class="action-icons">
+                            <button class="icon-btn btn-view-icon"><i class="fa-regular fa-eye"></i></button>
+                            <button class="icon-btn btn-edit-icon"><i class="fa-regular fa-pen-to-square"></i></button>
+                            <button class="icon-btn btn-delete-icon"><i class="fa-regular fa-trash-can"></i></button>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Row 3 -->
+                <tr>
+                    <td>2021ECE001</td>
+                    <td>
+                        <div class="student-info">
+                            <span class="student-name">Rahul Kumar</span>
+                            <span class="student-email">rahul@ecb.ac.in</span>
+                        </div>
+                    </td>
+                    <td><span class="dept-badge badge-ece">ECE</span></td>
+                    <td>2nd Year</td>
+                    <td>
+                        <div class="progress-wrapper">
+                            <div class="progress-bar-bg"><div class="progress-bar-fill fill-yellow" style="width: 88%;"></div></div>
+                            <span class="progress-text">88%</span>
+                        </div>
+                    </td>
+                    <td><span class="cgpa-badge cgpa-yellow">7.8</span></td>
+                    <td>
+                        <div class="action-icons">
+                            <button class="icon-btn btn-view-icon"><i class="fa-regular fa-eye"></i></button>
+                            <button class="icon-btn btn-edit-icon"><i class="fa-regular fa-pen-to-square"></i></button>
+                            <button class="icon-btn btn-delete-icon"><i class="fa-regular fa-trash-can"></i></button>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Row 4 -->
+                <tr>
+                    <td>2021ME001</td>
+                    <td>
+                        <div class="student-info">
+                            <span class="student-name">Anjali Verma</span>
+                            <span class="student-email">anjali@ecb.ac.in</span>
+                        </div>
+                    </td>
+                    <td><span class="dept-badge badge-me">ME</span></td>
+                    <td>4th Year</td>
+                    <td>
+                        <div class="progress-wrapper">
+                            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green" style="width: 90%;"></div></div>
+                            <span class="progress-text">90%</span>
+                        </div>
+                    </td>
+                    <td><span class="cgpa-badge cgpa-blue">8.9</span></td>
+                    <td>
+                        <div class="action-icons">
+                            <button class="icon-btn btn-view-icon"><i class="fa-regular fa-eye"></i></button>
+                            <button class="icon-btn btn-edit-icon"><i class="fa-regular fa-pen-to-square"></i></button>
+                            <button class="icon-btn btn-delete-icon"><i class="fa-regular fa-trash-can"></i></button>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Row 5 -->
+                <tr>
+                    <td>2021CSE003</td>
+                    <td>
+                        <div class="student-info">
+                            <span class="student-name">Amit Singh</span>
+                            <span class="student-email">amit@ecb.ac.in</span>
+                        </div>
+                    </td>
+                    <td><span class="dept-badge badge-cse">CSE</span></td>
+                    <td>1st Year</td>
+                    <td>
+                        <div class="progress-wrapper">
+                            <div class="progress-bar-bg"><div class="progress-bar-fill fill-yellow" style="width: 85%;"></div></div>
+                            <span class="progress-text">85%</span>
+                        </div>
+                    </td>
+                    <td><span class="cgpa-badge cgpa-blue">8.1</span></td>
+                    <td>
+                        <div class="action-icons">
+                            <button class="icon-btn btn-view-icon"><i class="fa-regular fa-eye"></i></button>
+                            <button class="icon-btn btn-edit-icon"><i class="fa-regular fa-pen-to-square"></i></button>
+                            <button class="icon-btn btn-delete-icon"><i class="fa-regular fa-trash-can"></i></button>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Row 6 -->
+                <tr>
+                    <td>2021EE001</td>
+                    <td>
+                        <div class="student-info">
+                            <span class="student-name">Sneha Patel</span>
+                            <span class="student-email">sneha@ecb.ac.in</span>
+                        </div>
+                    </td>
+                    <td><span class="dept-badge badge-ee">EE</span></td>
+                    <td>3rd Year</td>
+                    <td>
+                        <div class="progress-wrapper">
+                            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green" style="width: 93%;"></div></div>
+                            <span class="progress-text">93%</span>
+                        </div>
+                    </td>
+                    <td><span class="cgpa-badge cgpa-blue">8.7</span></td>
+                    <td>
+                        <div class="action-icons">
+                            <button class="icon-btn btn-view-icon"><i class="fa-regular fa-eye"></i></button>
+                            <button class="icon-btn btn-edit-icon"><i class="fa-regular fa-pen-to-square"></i></button>
+                            <button class="icon-btn btn-delete-icon"><i class="fa-regular fa-trash-can"></i></button>
+                        </div>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Floating Chat -->
+    <div class="chat-btn-container">
+        <div class="chat-btn">
+            <i class="fa-regular fa-comment-dots"></i>
+            <span class="notification-dot"></span>
+        </div>
+        <div style="width: 35px; height: 35px; background: #1f2937; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+            <i class="fa-solid fa-question" style="font-size: 0.8rem;"></i>
+        </div>
+    </div>
+
+</body>
+</html>
